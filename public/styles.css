@@ -17,6 +17,27 @@ body {
 	margin: auto;
 }
 
+.scoreboard {
+	font-family: 'Press Start 2P', cursive;
+	font-size: 1rem;
+	margin: 5%;
+	color: #fef2bf;
+	
+}
+
+#names {
+  border:1px solid ;
+  
+	margin-left: auto;
+	margin-right: auto;
+  
+	text-align:left;
+}
+
+#names tr td  , #names tr th {
+  padding:1em;
+}
+
 .btn {
 	margin: 25px;
 	display: inline-block;

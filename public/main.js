@@ -7,6 +7,12 @@ let eleccionMaquina = [];
 let entrada = false;
 let level = 0;
 
+const NO_OF_HIGH_SCORES = 10;
+const HIGH_SCORES = 'highScores';
+
+const highScoreString = localStorage.getItem(HIGH_SCORES);
+const highScores = JSON.parse(highScoreString) || [];
+
 //Documento
 
 $(document).keydown(function () {
@@ -47,7 +53,7 @@ function gamePattern() {
 	eleccionUsuario = [];
 
 	level++;
-	$('h1').text(`Nivel ${level}`);
+	$('#level-title').text(`Nivel ${level}`);
 
 	let randomNumber = Math.floor(Math.random() * 4);
 
@@ -77,6 +83,7 @@ function checkAnswer(nivel) {
 			$('body').removeClass('game-over');
 		}, 200);
 
+		checkHighScore(level);
 		startOver();
 	}
 }
@@ -98,4 +105,49 @@ function animatePress(color) {
 	setTimeout(function () {
 		$('#' + color).removeClass('pressed');
 	}, 100);
+}
+
+// HighScore Board
+
+function checkHighScore(score) {
+	const highScores = JSON.parse(localStorage.getItem(HIGH_SCORES)) || [];
+	const lowestScore = highScores[NO_OF_HIGH_SCORES - 1]?.score ?? 0;
+
+	if (score > lowestScore) {
+		saveHighScore(score, highScores); // TODO
+		showHighScores(); // TODO
+	}
+}
+
+function saveHighScore(score, highScores) {
+	const name = prompt('Escribe tu nombre para agregar tu puntuación');
+	const newScore = { score, name };
+
+	// 1. Add to list
+	highScores.push(newScore);
+
+	// 2. Sort the list
+	highScores.sort((a, b) => b.score - a.score);
+
+	// 3. Select new list
+	highScores.splice(NO_OF_HIGH_SCORES);
+
+	// 4. Save to local storage
+	localStorage.setItem(HIGH_SCORES, JSON.stringify(highScores));
+}
+
+function showHighScores() {
+	const highScores = JSON.parse(localStorage.getItem(HIGH_SCORES)) || [];
+
+	for (let i = 0; i < highScores.length; i++) {
+		nombre = highScores[i]['name'];
+		score = highScores[i]['score'];
+		$('<tr><td>' + nombre + '</td><td>' + score + '</td</tr>').appendTo(
+			'#names'
+		);
+	}
+}
+
+function clearStorage() {
+	window.localStorage.clear();
 }
